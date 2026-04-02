@@ -150,7 +150,9 @@ export default function Notifications() {
     if (!token || !raw) return;
 
     const user   = JSON.parse(raw);
-    const socket = io("http://localhost:5000", { transports:["websocket"] });
+    const socket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
+  transports: ["websocket"]
+});
     socketRef.current = socket;
 
     socket.on("connect", () => {

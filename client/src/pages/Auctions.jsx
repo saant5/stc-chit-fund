@@ -174,7 +174,9 @@ export default function Auctions(){
   useEffect(()=>{if(tab==="history")fetchHistory();},[tab,fetchHistory]);
 
   useEffect(()=>{
-    const socket=io("http://localhost:5000",{transports:["websocket"]});
+    const socket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
+  transports: ["websocket"]
+});
     socketRef.current=socket;
     socket.on("connect",()=>setConnected(true));
     socket.on("disconnect",()=>setConnected(false));
