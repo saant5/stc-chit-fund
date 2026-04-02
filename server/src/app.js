@@ -12,15 +12,41 @@ connectDB();
 const app = express();
 
 /* =========================
-   MIDDLEWARE
+   CORS CONFIG
 ========================= */
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (Postman, server-to-server, mobile apps, etc.)
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = [
+      
+      "https://stc-chit-fund.vercel.app",
+      "https://stc-chit-fund-4bff.vercel.app",
+    ];
+
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.endsWith(".vercel.app")
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`Not allowed by CORS: ${origin}`));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
+/* =========================
+   MIDDLEWARE
+========================= */
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -80,16 +106,9 @@ app.use((err, req, res, next) => {
   console.error("Error:", err.message);
   res.status(500).json({
     success: false,
-    msg: "Internal server error",
+    msg: err.message || "Internal server error",
   });
 });
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://your-frontend.vercel.app",
-  ],
-  credentials: true,
-}));
 
 /* =========================
    EXPORT

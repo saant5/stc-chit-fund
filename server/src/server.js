@@ -8,7 +8,7 @@ const server = http.createServer(app);
 
 // Allowed frontend URLs
 const allowedOrigins = [
-  "http://localhost:5173",
+
   "https://your-frontend.vercel.app",
 ];
 
