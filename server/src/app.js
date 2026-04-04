@@ -47,7 +47,14 @@ app.options("*", cors(corsOptions));
 /* =========================
    MIDDLEWARE
 ========================= */
-
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://stc-chit-fund-4bff.vercel.app",
+    process.env.FRONTEND_URL,
+  ].filter(Boolean),
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
